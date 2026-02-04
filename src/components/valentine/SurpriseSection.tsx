@@ -55,7 +55,7 @@ const SurpriseCard = ({ surprise, index }: { surprise: Surprise; index: number }
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <motion.button
-        className={`w-full p-6 rounded-lg vintage-border transition-colors ${
+        className={`w-full p-4 md:p-6 rounded-lg vintage-border transition-colors ${
           isOpen 
             ? 'bg-rose-light/30' 
             : 'bg-card hover:bg-rose-light/10'
@@ -68,7 +68,7 @@ const SurpriseCard = ({ surprise, index }: { surprise: Surprise; index: number }
           {!isOpen ? (
             <motion.div
               key="closed"
-              className="flex flex-col items-center gap-3"
+              className="flex flex-col items-center gap-2 md:gap-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -76,13 +76,13 @@ const SurpriseCard = ({ surprise, index }: { surprise: Surprise; index: number }
               {surprise.icon === 'heart' ? (
                 <Heart 
                   className="text-rose animate-heartbeat" 
-                  size={40} 
+                  size={32} 
                   fill="currentColor"
                 />
               ) : (
-                <Mail className="text-gold" size={40} />
+                <Mail className="text-gold" size={32} />
               )}
-              <p className="font-script text-xl text-foreground">
+              <p className="font-script text-lg md:text-xl text-foreground">
                 Click to reveal!
               </p>
             </motion.div>
@@ -113,10 +113,10 @@ const SurpriseCard = ({ surprise, index }: { surprise: Surprise; index: number }
                 <Sparkle />
               </motion.div>
 
-              <h3 className="font-serif text-lg text-primary mb-3">
+              <h3 className="font-serif text-base md:text-lg text-primary mb-2 md:mb-3">
                 {surprise.title}
               </h3>
-              <p className="font-body text-lg text-foreground leading-relaxed">
+              <p className="font-body text-base md:text-lg text-foreground leading-relaxed">
                 {surprise.message}
               </p>
             </motion.div>
@@ -129,27 +129,27 @@ const SurpriseCard = ({ surprise, index }: { surprise: Surprise; index: number }
 
 export const SurpriseSection = () => {
   return (
-    <section className="relative py-20 px-4">
+    <section className="relative py-12 md:py-20 px-3 md:px-4">
       <div className="max-w-4xl mx-auto">
         {/* Section header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
+          <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mb-3 md:mb-4">
             Reasons Why You're Amazing
           </h2>
-          <p className="font-body text-lg text-muted-foreground">
+          <p className="font-body text-base md:text-lg text-muted-foreground">
             Click each card to reveal a surprise! 💕
           </p>
-          <div className="h-px w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="h-px w-36 md:w-48 mx-auto mt-3 md:mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
         </motion.div>
 
-        {/* Surprise cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Surprise cards grid - 2 columns on mobile */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {surprises.map((surprise, index) => (
             <SurpriseCard key={surprise.id} surprise={surprise} index={index} />
           ))}

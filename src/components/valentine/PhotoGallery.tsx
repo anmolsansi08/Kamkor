@@ -73,27 +73,27 @@ const PolaroidFrame = ({ photo, index }: { photo: PhotoFrame; index: number }) =
 
 export const PhotoGallery = () => {
   return (
-    <section className="relative py-20 px-4 overflow-hidden">
+    <section className="relative py-12 md:py-20 px-3 md:px-4 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
+          <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mb-3 md:mb-4">
             Our Memories
           </h2>
-          <p className="font-body text-lg text-muted-foreground">
+          <p className="font-body text-base md:text-lg text-muted-foreground">
             Moments that make our friendship special
           </p>
-          <div className="h-px w-48 mx-auto mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="h-px w-36 md:w-48 mx-auto mt-3 md:mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
         </motion.div>
 
-        {/* Photo grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+        {/* Photo grid - 2 columns on mobile, 3 on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
           {photos.map((photo, index) => (
             <PolaroidFrame key={photo.id} photo={photo} index={index} />
           ))}
@@ -101,7 +101,7 @@ export const PhotoGallery = () => {
 
         {/* Note about adding photos */}
         <motion.p
-          className="text-center mt-12 font-body text-muted-foreground italic"
+          className="text-center mt-8 md:mt-12 font-body text-sm md:text-base text-muted-foreground italic px-4"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
