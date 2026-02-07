@@ -14,11 +14,12 @@ const photos: PhotoFrame[] = [
   { id: 4, caption: 'Friends forever 💖', rotation: 4 },
   { id: 5, caption: 'Moments to cherish 🌸', rotation: -4 },
   { id: 6, caption: 'You mean the world 🌍', rotation: 1 },
+  { id: 7, caption: 'Unforgettable days 🌟', rotation: -1 },
+  { id: 8, caption: 'Always in my heart 💗', rotation: 3 },
+  { id: 9, caption: 'Partners in crime 😂', rotation: -3 },
 ];
 
 const PolaroidFrame = ({ photo, index }: { photo: PhotoFrame; index: number }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <motion.div
       className="relative cursor-pointer"
@@ -26,43 +27,25 @@ const PolaroidFrame = ({ photo, index }: { photo: PhotoFrame; index: number }) =
       initial={{ opacity: 0, y: 50, rotate: photo.rotation }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
       whileHover={{ 
         scale: 1.05, 
         rotate: 0,
         zIndex: 10,
         transition: { duration: 0.3 }
       }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="bg-cream p-3 pb-12 shadow-lg rounded-sm relative">
+      <div className="bg-cream p-3 pb-4 shadow-lg rounded-sm relative">
         {/* Photo placeholder */}
         <div className="aspect-square w-full bg-gradient-to-br from-rose-light/30 to-gold-light/30 flex items-center justify-center overflow-hidden">
-          <div className="text-center p-4">
-            <motion.div
-              className="text-6xl mb-2"
-              animate={isHovered ? { scale: [1, 1.2, 1] } : {}}
-              transition={{ duration: 0.5 }}
-            >
-              📷
-            </motion.div>
-            <p className="font-body text-sm text-muted-foreground">
-              Add your photo here
-            </p>
-          </div>
+          <motion.div
+            className="text-5xl md:text-6xl"
+            whileHover={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 0.5 }}
+          >
+            📷
+          </motion.div>
         </div>
-
-        {/* Caption */}
-        <motion.div
-          className="absolute bottom-2 left-0 right-0 text-center"
-          initial={{ opacity: 0.7 }}
-          animate={{ opacity: isHovered ? 1 : 0.7 }}
-        >
-          <p className="font-script text-lg text-foreground/80 px-2">
-            {photo.caption}
-          </p>
-        </motion.div>
 
         {/* Tape effect */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-12 h-4 bg-gold/30 rounded-sm transform -rotate-2" />
@@ -92,23 +75,12 @@ export const PhotoGallery = () => {
           <div className="h-px w-36 md:w-48 mx-auto mt-3 md:mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
         </motion.div>
 
-        {/* Photo grid - 2 columns on mobile, 3 on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
+        {/* Photo grid */}
+        <div className="grid grid-cols-3 gap-3 md:gap-6 lg:gap-10">
           {photos.map((photo, index) => (
             <PolaroidFrame key={photo.id} photo={photo} index={index} />
           ))}
         </div>
-
-        {/* Note about adding photos */}
-        <motion.p
-          className="text-center mt-8 md:mt-12 font-body text-sm md:text-base text-muted-foreground italic px-4"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 1 }}
-        >
-          ✨ Add your favorite photos to make this gallery truly special ✨
-        </motion.p>
       </div>
     </section>
   );
