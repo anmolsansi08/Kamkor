@@ -9,7 +9,7 @@ interface Petal {
   duration: number;
   size: number;
   rotation: number;
-  type: 'rose' | 'lavender';
+  type: 'rose' | 'lavender' | 'heart';
 }
 
 export const FallingPetals = () => {
@@ -21,14 +21,23 @@ export const FallingPetals = () => {
       const newPetals: Petal[] = [];
       const petalCount = isMobile ? 12 : 20;
       for (let i = 0; i < petalCount; i++) {
+        const roll = Math.random();
+        const type = roll < 0.25 ? 'heart' : Math.random() > 0.5 ? 'rose' : 'lavender';
         newPetals.push({
           id: i,
           x: Math.random() * 100,
           delay: Math.random() * 10,
           duration: 8 + Math.random() * 8,
-          size: isMobile ? 30 + Math.random() * 22 : 42 + Math.random() * 33,
+          size:
+            type === 'heart'
+              ? isMobile
+                ? 18 + Math.random() * 12
+                : 22 + Math.random() * 16
+              : isMobile
+                ? 30 + Math.random() * 22
+                : 42 + Math.random() * 33,
           rotation: Math.random() * 360,
-          type: Math.random() > 0.5 ? 'rose' : 'lavender',
+          type,
         });
       }
       setPetals(newPetals);
@@ -77,7 +86,7 @@ export const FallingPetals = () => {
                 opacity="0.6"
               />
             </svg>
-          ) : (
+          ) : petal.type === 'lavender' ? (
             <svg
               width={petal.size}
               height={petal.size}
@@ -91,6 +100,14 @@ export const FallingPetals = () => {
               <ellipse cx="14" cy="12" rx="2.5" ry="4" fill="hsl(270, 50%, 75%)" />
               <ellipse cx="12" cy="16" rx="2" ry="3" fill="hsl(270, 40%, 80%)" />
             </svg>
+          ) : (
+            <span
+              className="select-none opacity-75"
+              style={{ fontSize: `${petal.size}px`, lineHeight: 1 }}
+              aria-hidden="true"
+            >
+              ❤️
+            </span>
           )}
         </motion.div>
       ))}
