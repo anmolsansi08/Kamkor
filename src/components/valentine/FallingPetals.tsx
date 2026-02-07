@@ -26,7 +26,7 @@ export const FallingPetals = () => {
           x: Math.random() * 100,
           delay: Math.random() * 10,
           duration: 8 + Math.random() * 8,
-          size: isMobile ? 20 + Math.random() * 15 : 28 + Math.random() * 22,
+          size: isMobile ? 30 + Math.random() * 22 : 42 + Math.random() * 33,
           rotation: Math.random() * 360,
           type: Math.random() > 0.5 ? 'rose' : 'lavender',
         });
