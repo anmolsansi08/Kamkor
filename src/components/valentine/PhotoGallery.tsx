@@ -1,23 +1,40 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 interface PhotoFrame {
   id: number;
-  caption: string;
+  imageSrc: string;
+  imageAlt: string;
   rotation: number;
 }
 
-const photos: PhotoFrame[] = [
-  { id: 1, caption: 'Best memories together 💕', rotation: -3 },
-  { id: 2, caption: 'Adventures we shared ✨', rotation: 2 },
-  { id: 3, caption: 'Laughter never ends 😄', rotation: -2 },
-  { id: 4, caption: 'Friends forever 💖', rotation: 4 },
-  { id: 5, caption: 'Moments to cherish 🌸', rotation: -4 },
-  { id: 6, caption: 'You mean the world 🌍', rotation: 1 },
-  { id: 7, caption: 'Unforgettable days 🌟', rotation: -1 },
-  { id: 8, caption: 'Always in my heart 💗', rotation: 3 },
-  { id: 9, caption: 'Partners in crime 😂', rotation: -3 },
-];
+const rotationPattern = [-3, 2, -2, 4, -4, 1, -1, 3];
+
+const imageModules = import.meta.glob('/src/Pics/**/*.{jpg,jpeg,png,webp,avif,gif,JPG,JPEG,PNG,WEBP,AVIF,GIF}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+const shuffle = <T,>(items: T[]): T[] => {
+  const list = [...items];
+  for (let i = list.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [list[i], list[j]] = [list[j], list[i]];
+  }
+  return list;
+};
+
+const photos: PhotoFrame[] = shuffle(Object.entries(imageModules))
+  .map(([filePath, imageSrc], index) => {
+    const fileName = filePath.split('/').pop() ?? `photo-${index + 1}`;
+    const baseName = fileName.replace(/\.[^.]+$/, '');
+    return {
+      id: index + 1,
+      imageSrc,
+      imageAlt: baseName.replace(/[_-]+/g, ' ').trim() || `Photo ${index + 1}`,
+      rotation: rotationPattern[index % rotationPattern.length],
+    };
+  });
 
 const PolaroidFrame = ({ photo, index }: { photo: PhotoFrame; index: number }) => {
   return (
@@ -36,15 +53,16 @@ const PolaroidFrame = ({ photo, index }: { photo: PhotoFrame; index: number }) =
       }}
     >
       <div className="bg-cream p-3 pb-4 shadow-lg rounded-sm relative">
-        {/* Photo placeholder */}
-        <div className="aspect-square w-full bg-gradient-to-br from-rose-light/30 to-gold-light/30 flex items-center justify-center overflow-hidden">
-          <motion.div
-            className="text-5xl md:text-6xl"
-            whileHover={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 0.5 }}
-          >
-            📷
-          </motion.div>
+        <div className="aspect-square w-full bg-gradient-to-br from-rose-light/30 to-gold-light/30 overflow-hidden">
+          <img
+            src={photo.imageSrc}
+            alt={photo.imageAlt}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            onError={(event) => {
+              event.currentTarget.src = '/placeholder.svg';
+            }}
+          />
         </div>
 
         {/* Tape effect */}
@@ -75,13 +93,20 @@ export const PhotoGallery = () => {
           <div className="h-px w-36 md:w-48 mx-auto mt-3 md:mt-4 bg-gradient-to-r from-transparent via-gold to-transparent" />
         </motion.div>
 
-        {/* Photo grid */}
-        <div className="grid grid-cols-3 gap-3 md:gap-6 lg:gap-10">
-          {photos.map((photo, index) => (
-            <PolaroidFrame key={photo.id} photo={photo} index={index} />
-          ))}
-        </div>
+        {photos.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 lg:gap-10">
+            {photos.map((photo, index) => (
+              <PolaroidFrame key={photo.id} photo={photo} index={index} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center font-body text-muted-foreground">
+            No images found in <code>src/Pics</code>.
+          </p>
+        )}
       </div>
     </section>
   );
 };
+
+  
